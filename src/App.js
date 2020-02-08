@@ -1,12 +1,14 @@
+import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
-import EstiloGlobal from "./styles/global";
-
+import GlobalStyle from "./styles/global";
+import Header from "./components/Header";
 import Main from "./pages/Main";
 
 function App() {
   return (
     <>
-      <EstiloGlobal />
+      <GlobalStyle />
+      <Header />
       <Main />
     </>
   );

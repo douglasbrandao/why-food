@@ -1,10 +1,12 @@
 import React from "react";
+import { Container } from "./styles";
+import ProductList from "../components/ProductList";
 
 function Main() {
   return (
-    <div>
-      <h1>Why food?</h1>
-    </div>
+    <Container>
+      <ProductList />
+    </Container>
   );
 }
 
