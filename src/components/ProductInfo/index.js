@@ -3,8 +3,9 @@ import api from "../../services/api";
 
 import { Options, StyledButton, Price } from "./styles";
 import { Modal, Image, Form, Badge } from "react-bootstrap";
-
 import PlusMinusInput from "../PlusMinusInput";
+
+import PropTypes from "prop-types";
 
 function ProductInfo({ show, product, handleClose }) {
   const [productInfos, setProductInfos] = useState({});
@@ -81,5 +82,17 @@ function ProductInfo({ show, product, handleClose }) {
     </Modal>
   );
 }
+
+ProductInfo.propTypes = {
+  show: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  product: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      price: PropTypes.number
+    })
+  ).isRequired
+};
 
 export default ProductInfo;

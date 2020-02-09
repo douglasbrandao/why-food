@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card } from "./styles";
 import ProductInfo from "../ProductInfo";
+import PropTypes from "prop-types";
 
 function ProductList({ product }) {
   const [show, setShow] = useState(false);
@@ -18,5 +19,15 @@ function ProductList({ product }) {
     </>
   );
 }
+
+ProductList.propTypes = {
+  product: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      price: PropTypes.number
+    })
+  ).isRequired
+};
 
 export default ProductList;

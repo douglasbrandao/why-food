@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Counter, Main, DownCounter, UpCounter } from "./styles";
+import PropTypes from "prop-types";
 
 function PlusMinusInput({ min, max }) {
   const [counter, setCounter] = useState(0);
@@ -20,5 +21,10 @@ function PlusMinusInput({ min, max }) {
     </Main>
   );
 }
+
+PlusMinusInput.propTypes = {
+  min: PropTypes.number.isRequired,
+  max: PropTypes.number.isRequired
+};
 
 export default PlusMinusInput;
