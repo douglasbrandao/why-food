@@ -25,3 +25,8 @@ export const StyledButton = styled(Button)`
     background-color: #cc0000;
   }
 `;
+
+export const Price = styled.span`
+  float: right;
+  color: #4b4b4b;
+`;

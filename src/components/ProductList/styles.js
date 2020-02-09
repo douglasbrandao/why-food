@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const Card = styled.a`
   width: 250px;
   padding: 10px;
-  margin-right: 4px;
+  margin-right: 10px;
+  margin-bottom: 20px;
   background-color: #eee;
   border-radius: 5px;
   display: flex;

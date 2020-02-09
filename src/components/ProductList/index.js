@@ -12,7 +12,7 @@ function ProductList({ product }) {
     <>
       <Card key={product.id} onClick={handleShow}>
         <h2>{product.name}</h2>
-        <span>A partir de R$ {product.price},00</span>
+        <span>A partir de {product.price}</span>
       </Card>
       <ProductInfo show={show} product={product} handleClose={handleClose} />
     </>
