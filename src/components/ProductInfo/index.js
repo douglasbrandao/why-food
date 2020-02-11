@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import api from "../../services/api";
+import { formatter } from "../../utils/formatCurrency";
 
 import { Options, StyledButton, Price } from "./styles";
 import { Modal, Image, Form, Badge } from "react-bootstrap";
@@ -100,7 +101,7 @@ function ProductInfo({ show, product, handleClose }) {
                       <PlusMinusInput min={options.min} max={options.max} />
                     </Form.Check.Label>
                   )}
-                  <Price>{values.price}</Price>
+                  <Price>{formatter(values.price)}</Price>
                 </Form.Check>
               ))}
             </Fragment>
@@ -111,7 +112,7 @@ function ProductInfo({ show, product, handleClose }) {
           </Form.Group>
           <Modal.Footer>
             <StyledButton type="submit">
-              <b>Fazer pedido</b> <small>{totalPrice}</small>
+              <b>Fazer pedido</b> <small>{formatter(totalPrice)}</small>
             </StyledButton>
           </Modal.Footer>
         </Form>

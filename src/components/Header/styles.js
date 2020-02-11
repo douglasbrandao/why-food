@@ -5,10 +5,11 @@ export const StyledHeader = styled.header`
   justify-content: center;
   align-items: center;
   background-color: #f00;
-  height: 80px;
+  height: 100px;
   width: 100%;
 `;
 
-export const Text = styled.h2`
+export const Text = styled.h1`
   color: #fff;
+  font-weight: bold;
 `;

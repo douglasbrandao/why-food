@@ -3,6 +3,7 @@ import api from "../services/api";
 
 import ProductList from "../components/ProductList";
 import { StyledContainer, StyledRow } from "./styles";
+import { formatter } from "../utils/formatCurrency";
 
 function Main() {
   const [products, setProducts] = useState([]);
@@ -10,8 +11,11 @@ function Main() {
   useEffect(() => {
     async function handleProducts() {
       const productsFromApi = await api.get("api/products");
-      console.log(productsFromApi.data);
-      setProducts([...products, productsFromApi.data]);
+      const data = productsFromApi.data.map(product => ({
+        ...product,
+        price: formatter(product.price)
+      }));
+      setProducts([...products, data]);
     }
 
     handleProducts();
