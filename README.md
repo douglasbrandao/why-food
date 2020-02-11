@@ -12,7 +12,7 @@ Projeto desenvolvido como teste prático para vaga de Desenvolvedor na empresa N
 * [Node](https://nodejs.org/en/)
 * [Yarn](https://classic.yarnpkg.com/en/docs/install)
 
-### Rodando
+## Rodando
 
 Instale as dependências
 
@@ -24,6 +24,6 @@ Execute o projeto
 
 Para acessar http://localhost:3000
 
-### Autor
+## Autor
 
 * Douglas Frota Brandão - [douglasbrandao](http://github.com/douglasbrandao)
