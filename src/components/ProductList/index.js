@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { Card } from "./styles";
 import ProductInfo from "../ProductInfo";
 import PropTypes from "prop-types";
@@ -10,13 +10,13 @@ function ProductList({ product }) {
   const handleShow = () => setShow(true);
 
   return (
-    <>
+    <Fragment>
       <Card key={product.id} onClick={handleShow}>
         <h2>{product.name}</h2>
         <span>A partir de {product.price}</span>
       </Card>
       <ProductInfo show={show} product={product} handleClose={handleClose} />
-    </>
+    </Fragment>
   );
 }
 

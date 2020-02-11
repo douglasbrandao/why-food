@@ -10,14 +10,18 @@ function PlusMinusInput({ min, max }) {
   }
 
   function decrement() {
-    if (counter > 0) setCounter(counter - 1);
+    if (counter !== 0 && counter >= min) setCounter(counter - 1);
   }
 
   return (
     <Main>
-      <DownCounter onClick={decrement}>-</DownCounter>
-      <Counter value={counter} onChange={e => {}} />
-      <UpCounter onClick={increment}>+</UpCounter>
+      <DownCounter type="button" onClick={decrement}>
+        -
+      </DownCounter>
+      <Counter value={counter} onChange={() => {}} />
+      <UpCounter type="button" onClick={increment}>
+        +
+      </UpCounter>
     </Main>
   );
 }

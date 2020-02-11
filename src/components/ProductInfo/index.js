@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import api from "../../services/api";
 
 import { Options, StyledButton, Price } from "./styles";
@@ -10,12 +10,18 @@ import PropTypes from "prop-types";
 function ProductInfo({ show, product, handleClose }) {
   const [productInfos, setProductInfos] = useState({});
   const [optionsProducts, setOptionsProducts] = useState([]);
+  const [form, setForm] = useState({
+    id: null,
+    obs: "",
+    items: []
+  });
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     async function handleProductInfos() {
-      const response = await api.get(`/api/products/${product.id}`);
+      const response = await api.get(`api/products/${product.id}`);
       setProductInfos(response.data);
+      setForm({ ...form, id: response.data.id });
       setOptionsProducts(response.data.options);
       setTotalPrice(response.data.price);
     }
@@ -26,6 +32,29 @@ function ProductInfo({ show, product, handleClose }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    console.log(form);
+    await api.post("api/order", form).then(response => {
+      console.log(response.data);
+    });
+  }
+
+  function handleTextArea(e) {
+    setForm({ ...form, obs: e.target.value });
+  }
+
+  function handleInputs(op_id, val_id, type, price) {
+    setTotalPrice(totalPrice + price);
+    setForm({
+      ...form,
+      items: [
+        ...form.items,
+        {
+          id: op_id,
+          value: val_id,
+          type: type
+        }
+      ]
+    });
   }
 
   return (
@@ -34,17 +63,14 @@ function ProductInfo({ show, product, handleClose }) {
         <Image src={productInfos.image_url} width="50%" rounded />
       </Modal.Header>
       <Modal.Body>
-        <Badge variant="success">{product.price}</Badge>
         <Form onSubmit={handleSubmit}>
           {optionsProducts.map(options => (
-            <>
-              <Options key={options.id}>
+            <Fragment>
+              <Options key={options.id} controlId={options.title}>
                 <span>{options.title}</span>
                 {options.required ? (
                   <Badge variant="secondary">Obrigatório</Badge>
-                ) : (
-                  ""
-                )}
+                ) : null}
               </Options>
 
               {options.values.map(values => (
@@ -53,14 +79,21 @@ function ProductInfo({ show, product, handleClose }) {
                   id={`${options.title}-${values.id}`}
                 >
                   {options.type === "single" ? (
-                    <>
+                    <Fragment>
                       <Form.Check.Input
                         name={options.title}
                         type="radio"
-                        isValid
+                        onChange={() =>
+                          handleInputs(
+                            options.id,
+                            values.id,
+                            options.type,
+                            values.price
+                          )
+                        }
                       />
                       <Form.Check.Label>{values.name}</Form.Check.Label>
-                    </>
+                    </Fragment>
                   ) : (
                     <Form.Check.Label>
                       {values.name}
@@ -70,15 +103,19 @@ function ProductInfo({ show, product, handleClose }) {
                   <Price>{values.price}</Price>
                 </Form.Check>
               ))}
-            </>
+            </Fragment>
           ))}
+          <Form.Group controlId="Observacao">
+            <Form.Label>Observação</Form.Label>
+            <Form.Control as="textarea" onBlur={handleTextArea} rows="3" />
+          </Form.Group>
+          <Modal.Footer>
+            <StyledButton type="submit">
+              <b>Fazer pedido</b> <small>{totalPrice}</small>
+            </StyledButton>
+          </Modal.Footer>
         </Form>
       </Modal.Body>
-      <Modal.Footer>
-        <StyledButton onClick={handleClose}>
-          <b>Fazer pedido</b> <small>{totalPrice}</small>
-        </StyledButton>
-      </Modal.Footer>
     </Modal>
   );
 }

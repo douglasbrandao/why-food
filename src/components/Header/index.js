@@ -3,11 +3,9 @@ import { StyledHeader, Text } from "./styles";
 
 function Header() {
   return (
-    <div>
-      <StyledHeader>
-        <Text>Why food?</Text>
-      </StyledHeader>
-    </div>
+    <StyledHeader>
+      <Text>Why food?</Text>
+    </StyledHeader>
   );
 }
 

@@ -10,6 +10,7 @@ function Main() {
   useEffect(() => {
     async function handleProducts() {
       const productsFromApi = await api.get("api/products");
+      console.log(productsFromApi.data);
       setProducts([...products, productsFromApi.data]);
     }
 
