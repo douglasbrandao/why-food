@@ -3,16 +3,16 @@
 Aplicação de pedidos de comida baseado no sistema de pedidos do iFood.
 Projeto desenvolvido como teste prático para vaga de Desenvolvedor na empresa Nuvem Tecnologia.
 
-### Imagens
+## Imagens
 
 <img width="403" height="253" src="https://i.imgur.com/aBJ9ZdQ.png"> <img width="403" height="253" src="https://i.imgur.com/Dekil4P.png">
 
-### Requisitos
+## Requisitos
 
 * [Node](https://nodejs.org/en/)
 * [Yarn](https://classic.yarnpkg.com/en/docs/install)
 
-#### Rodando
+### Rodando
 
 Instale as dependências
 
