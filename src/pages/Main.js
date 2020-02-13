@@ -10,26 +10,23 @@ function Main() {
 
   useEffect(() => {
     async function handleProducts() {
-      const productsFromApi = await api.get("api/products");
-      const data = productsFromApi.data.map(product => ({
+      const productsList = await api.get("api/products");
+      const data = productsList.data.map(product => ({
         ...product,
-        price: formatter(product.price)
+        priceFormatted: formatter(product.price)
       }));
-      setProducts([...products, data]);
+      setProducts(data);
     }
 
     handleProducts();
-    // eslint-disable-next-line
   }, []);
 
   return (
     <StyledContainer>
       <StyledRow className="justify-content-center">
-        {products.map(arr_product =>
-          arr_product.map(product => (
-            <ProductList key={product.id} product={product} />
-          ))
-        )}
+        {products.map(product => (
+          <ProductList key={product.id} product={product} />
+        ))}
       </StyledRow>
     </StyledContainer>
   );

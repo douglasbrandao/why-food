@@ -17,6 +17,7 @@ export const UpCounter = styled.button`
   padding-left: 5px;
   padding-right: 5px;
   border: 0;
+  border-radius: 5px;
 `;
 
 export const DownCounter = styled.button`
@@ -26,4 +27,5 @@ export const DownCounter = styled.button`
   padding-left: 5px;
   padding-right: 5px;
   border: 0;
+  border-radius: 5px;
 `;

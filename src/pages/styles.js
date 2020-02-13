@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Container, Row } from "react-bootstrap";
+import { Container, Row } from "reactstrap";
 
 export const StyledContainer = styled(Container)`
   margin-top: 40px;

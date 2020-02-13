@@ -2,26 +2,34 @@ import React, { useState, useEffect, Fragment } from "react";
 import api from "../../services/api";
 import { formatter } from "../../utils/formatCurrency";
 
-import { Options, StyledButton, Price } from "./styles";
-import { Modal, Image, Form, Badge } from "react-bootstrap";
+import { Options, StyledButton, LabelPrice, RowInput } from "./styles";
+import {
+  Modal,
+  ModalBody,
+  ModalFooter,
+  Form,
+  FormGroup,
+  CustomInput,
+  Input,
+  Label,
+  Badge
+} from "reactstrap";
 import PlusMinusInput from "../PlusMinusInput";
 
 import PropTypes from "prop-types";
 
 function ProductInfo({ show, product, handleClose }) {
-  const [productInfos, setProductInfos] = useState({});
   const [optionsProducts, setOptionsProducts] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [form, setForm] = useState({
     id: null,
     obs: "",
     items: []
   });
-  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     async function handleProductInfos() {
       const response = await api.get(`api/products/${product.id}`);
-      setProductInfos(response.data);
       setForm({ ...form, id: response.data.id });
       setOptionsProducts(response.data.options);
       setTotalPrice(response.data.price);
@@ -33,7 +41,6 @@ function ProductInfo({ show, product, handleClose }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(form);
     await api.post("api/order", form).then(response => {
       console.log(response.data);
     });
@@ -59,32 +66,31 @@ function ProductInfo({ show, product, handleClose }) {
   }
 
   return (
-    <Modal show={show} onHide={handleClose} scrollable>
-      <Modal.Header closeButton>
-        <Image src={productInfos.image_url} width="50%" rounded />
-      </Modal.Header>
-      <Modal.Body>
+    <Modal isOpen={show} toggle={handleClose} scrollable>
+      <ModalBody>
         <Form onSubmit={handleSubmit}>
           {optionsProducts.map(options => (
             <Fragment>
-              <Options key={options.id} controlId={options.title}>
+              <Options key={options.id}>
                 <span>{options.title}</span>
-                {options.required ? (
+                {options.required && (
                   <Badge variant="secondary">Obrigatório</Badge>
-                ) : null}
+                )}
               </Options>
 
               {options.values.map(values => (
-                <Form.Check
-                  key={values.id}
-                  id={`${options.title}-${values.id}`}
-                >
-                  {options.type === "single" ? (
-                    <Fragment>
-                      <Form.Check.Input
-                        name={options.title}
+                <FormGroup key={values.id}>
+                  <RowInput>
+                    <LabelPrice>
+                      <strong>{values.name}</strong>
+                      <small>{formatter(values.price)}</small>
+                    </LabelPrice>
+                    {options.type === "single" && (
+                      <CustomInput
                         type="radio"
-                        onChange={() =>
+                        id={`valueId-${options.id}-${values.id}`}
+                        name={`valueName-${options.id}`}
+                        onClick={() =>
                           handleInputs(
                             options.id,
                             values.id,
@@ -93,30 +99,31 @@ function ProductInfo({ show, product, handleClose }) {
                           )
                         }
                       />
-                      <Form.Check.Label>{values.name}</Form.Check.Label>
-                    </Fragment>
-                  ) : (
-                    <Form.Check.Label>
-                      {values.name}
+                    )}
+
+                    {options.type === "multiple" && (
                       <PlusMinusInput min={options.min} max={options.max} />
-                    </Form.Check.Label>
-                  )}
-                  <Price>{formatter(values.price)}</Price>
-                </Form.Check>
+                    )}
+
+                    {options.type === "list" && (
+                      <PlusMinusInput min={options.min} max={options.max} />
+                    )}
+                  </RowInput>
+                </FormGroup>
               ))}
             </Fragment>
           ))}
-          <Form.Group controlId="Observacao">
-            <Form.Label>Observação</Form.Label>
-            <Form.Control as="textarea" onBlur={handleTextArea} rows="3" />
-          </Form.Group>
-          <Modal.Footer>
+          <FormGroup>
+            <Label>Observação</Label>
+            <Input type="textarea" name="obs" onBlur={handleTextArea} />
+          </FormGroup>
+          <ModalFooter>
             <StyledButton type="submit">
               <b>Fazer pedido</b> <small>{formatter(totalPrice)}</small>
             </StyledButton>
-          </Modal.Footer>
+          </ModalFooter>
         </Form>
-      </Modal.Body>
+      </ModalBody>
     </Modal>
   );
 }
@@ -124,13 +131,11 @@ function ProductInfo({ show, product, handleClose }) {
 ProductInfo.propTypes = {
   show: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  product: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      price: PropTypes.number
-    })
-  ).isRequired
+  product: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    price: PropTypes.number
+  }).isRequired
 };
 
 export default ProductInfo;

@@ -3,27 +3,23 @@
 Aplicação de pedidos de comida baseado no sistema de pedidos do iFood.
 Projeto desenvolvido como teste prático para vaga de Desenvolvedor na empresa Nuvem Tecnologia.
 
-## Imagens
-
-<img width="403" height="253" src="https://i.imgur.com/aBJ9ZdQ.png"> <img width="403" height="253" src="https://i.imgur.com/Dekil4P.png">
-
 ## Requisitos
 
-* [Node](https://nodejs.org/en/)
-* [Yarn](https://classic.yarnpkg.com/en/docs/install)
+- [Node](https://nodejs.org/en/)
+- [Yarn](https://classic.yarnpkg.com/en/docs/install)
 
 ## Rodando
 
 Instale as dependências
 
-```yarn```
+`yarn`
 
 Execute o projeto
 
-```yarn start```
+`yarn start`
 
 Para acessar http://localhost:3000
 
 ## Autor
 
-* Douglas Frota Brandão - [douglasbrandao](http://github.com/douglasbrandao)
+- Douglas Frota Brandão - [douglasbrandao](http://github.com/douglasbrandao)

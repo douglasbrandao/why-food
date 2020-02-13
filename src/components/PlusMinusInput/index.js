@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Counter, Main, DownCounter, UpCounter } from "./styles";
+import { FaMinus, FaPlus } from "react-icons/fa";
 import PropTypes from "prop-types";
 
 function PlusMinusInput({ min, max }) {
@@ -16,11 +17,11 @@ function PlusMinusInput({ min, max }) {
   return (
     <Main>
       <DownCounter type="button" onClick={decrement}>
-        -
+        <FaMinus />
       </DownCounter>
       <Counter value={counter} onChange={() => {}} />
       <UpCounter type="button" onClick={increment}>
-        +
+        <FaPlus />
       </UpCounter>
     </Main>
   );

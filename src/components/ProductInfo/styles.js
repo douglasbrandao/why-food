@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button } from "react-bootstrap";
+import { Button } from "reactstrap";
 
 export const Options = styled.div`
   margin: 10px 0 5px 0;
@@ -26,7 +26,14 @@ export const StyledButton = styled(Button)`
   }
 `;
 
-export const Price = styled.span`
+export const LabelPrice = styled.div`
+  display: flex;
+  flex-direction: column;
   float: right;
   color: #4b4b4b;
+`;
+
+export const RowInput = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
