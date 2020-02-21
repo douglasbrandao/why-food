@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import api from "../services/api";
 
 import ProductList from "../components/ProductList";
 import { StyledContainer, StyledRow } from "./styles";
 import { formatter } from "../utils/formatCurrency";
+
+export const ProductsContext = createContext();
 
 function Main() {
   const [products, setProducts] = useState([]);
@@ -25,7 +27,9 @@ function Main() {
     <StyledContainer>
       <StyledRow className="justify-content-center">
         {products.map(product => (
-          <ProductList key={product.id} product={product} />
+          <ProductsContext.Provider value={product}>
+            <ProductList key={product.id} />
+          </ProductsContext.Provider>
         ))}
       </StyledRow>
     </StyledContainer>

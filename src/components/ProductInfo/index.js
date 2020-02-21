@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useContext } from "react";
 import api from "../../services/api";
 import { formatter } from "../../utils/formatCurrency";
 
@@ -16,9 +16,12 @@ import {
 } from "reactstrap";
 import PlusMinusInput from "../PlusMinusInput";
 
+import { ProductsContext } from "../../pages/Main";
+
 import PropTypes from "prop-types";
 
-function ProductInfo({ show, product, handleClose }) {
+function ProductInfo({ show, handleClose }) {
+  const product = useContext(ProductsContext);
   const [optionsProducts, setOptionsProducts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [form, setForm] = useState({
@@ -130,12 +133,7 @@ function ProductInfo({ show, product, handleClose }) {
 
 ProductInfo.propTypes = {
   show: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
-  product: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    price: PropTypes.number
-  }).isRequired
+  handleClose: PropTypes.func.isRequired
 };
 
 export default ProductInfo;
