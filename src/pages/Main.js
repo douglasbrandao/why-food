@@ -1,38 +1,33 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../services/api";
-
 import ProductList from "../components/ProductList";
-import { StyledContainer, StyledRow } from "./styles";
+import { Container, Row } from "./styles";
 import { formatter } from "../utils/formatCurrency";
-
-export const ProductsContext = createContext();
 
 function Main() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
+
     async function handleProducts() {
       const productsList = await api.get("api/products");
-      const data = productsList.data.map(product => ({
+      const productListData = productsList.data;
+      const productListWithPriceFormatted = productListData.map(product => ({
         ...product,
         priceFormatted: formatter(product.price)
       }));
-      setProducts(data);
+      setProducts(productListWithPriceFormatted);
     }
 
     handleProducts();
   }, []);
 
   return (
-    <StyledContainer>
-      <StyledRow className="justify-content-center">
-        {products.map(product => (
-          <ProductsContext.Provider value={product}>
-            <ProductList key={product.id} />
-          </ProductsContext.Provider>
-        ))}
-      </StyledRow>
-    </StyledContainer>
+    <Container>
+      <Row>
+        {products.map(product => <ProductList key={product.id} product={product} />)}
+      </Row>
+    </Container>
   );
 }
 

@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import { Card } from "reactstrap";
 
-export const StyledCard = styled(Card)`
+export const Card = styled.div`
   width: 250px;
   padding: 10px;
   margin-right: 10px;
@@ -10,6 +9,7 @@ export const StyledCard = styled(Card)`
   border-radius: 5px;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
   border: 0;
 
   &:hover {

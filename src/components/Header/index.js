@@ -1,14 +1,14 @@
 import React from "react";
-import { StyledHeader, Text } from "./styles";
 import { FaHotdog } from "react-icons/fa";
+import { HeaderBackground, Text } from "./styles";
 
 function Header() {
   return (
-    <StyledHeader>
+    <HeaderBackground>
       <Text>
         Why Food? <FaHotdog />
       </Text>
-    </StyledHeader>
+    </HeaderBackground>
   );
 }
 

@@ -1,10 +1,12 @@
 import styled from "styled-components";
-import { Container, Row } from "reactstrap";
 
-export const StyledContainer = styled(Container)`
+export const Container = styled.div`
   margin-top: 40px;
 `;
 
-export const StyledRow = styled(Row)`
-  margin-bottom: 30px;
+export const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 `;

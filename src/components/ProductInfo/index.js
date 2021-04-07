@@ -1,139 +1,181 @@
-import React, { useState, useEffect, Fragment, useContext } from "react";
-import api from "../../services/api";
-import { formatter } from "../../utils/formatCurrency";
-
-import { Options, StyledButton, LabelPrice, RowInput } from "./styles";
+import React, { useState, useEffect, Fragment } from "react";
 import {
   Modal,
   ModalBody,
+  ModalHeader,
   ModalFooter,
   Form,
   FormGroup,
-  CustomInput,
-  Input,
-  Label,
   Badge
 } from "reactstrap";
-import PlusMinusInput from "../PlusMinusInput";
-
-import { ProductsContext } from "../../pages/Main";
-
 import PropTypes from "prop-types";
+import api from "../../services/api";
+import { formatter } from "../../utils/formatCurrency";
+import Input from '../Input';
+import { Options, Button, Price, Row, Img, CenterTop } from "./styles";
 
-function ProductInfo({ show, handleClose }) {
-  const product = useContext(ProductsContext);
-  const [optionsProducts, setOptionsProducts] = useState([]);
+function ProductInfo({ show, handleClose, product }) {
+  const [singlePrice, setSinglePrice] = useState({});
+  const [multiplePrice, setMultiplePrice] = useState({});
+  const [listPrice, setListPrice] = useState([]);
+  const [initialPrice, setInitialPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [data, setData] = useState({});
   const [form, setForm] = useState({
     id: null,
     obs: "",
     items: []
   });
-
+  
   useEffect(() => {
-    async function handleProductInfos() {
-      const response = await api.get(`api/products/${product.id}`);
-      setForm({ ...form, id: response.data.id });
-      setOptionsProducts(response.data.options);
-      setTotalPrice(response.data.price);
+    async function handleData () {
+      await api.get(`api/products/${product.id}`)
+      .then(response => {
+        setInitialPrice(response.data.price);
+        setData(response.data);
+      });
     }
 
-    handleProductInfos();
-    // eslint-disable-next-line
-  }, []);
+    handleData();
+  }, [product.id]);
 
-  async function handleSubmit(e) {
+  useEffect(() => {
+    const totalSingle = Object.values(singlePrice).reduce((total, current) => total + current.price, 0);
+
+    const totalMultiple = Object.values(multiplePrice).reduce((total, current) => total + current.price, 0);
+
+    const totalList = listPrice.reduce((total, current) => total + (current.value.price * current.value.count), 0);
+
+    setTotalPrice(initialPrice + totalSingle + totalMultiple + totalList);
+  }, [initialPrice, singlePrice, multiplePrice, listPrice]);
+
+  // Handlers
+
+  function handleSingle(optionId, valueId, price) {
+    setSinglePrice(prevSinglePrice => ({ ...prevSinglePrice, [optionId]: {
+      id: optionId,
+      value: valueId,
+      type: "single",
+      price
+      }
+    }));
+  }
+
+  function handleMultiple(optionId, valueId, price) {
+
+      const multipleId = `${optionId}-${valueId}`;
+
+      if(multiplePrice.hasOwnProperty(multipleId)) {
+        const newMultiplePrice = { ...multiplePrice };
+        delete newMultiplePrice[multipleId];
+        setMultiplePrice(newMultiplePrice);
+      } else {
+        setMultiplePrice(prevMultiplePrice => ({ ...prevMultiplePrice, [multipleId]: {
+          id: optionId,
+          value: valueId,
+          price,
+          type: "multiple"
+         }}));
+      }
+  }
+
+  function handleList(optionId, valueId, price, count) {
+
+    const listId = `${optionId}-${valueId}`;
+      
+    const updatedListPrice = listPrice.filter(element => element.listId !== listId);
+
+    setListPrice([...updatedListPrice, {
+      listId,
+      id: optionId,
+      value: { id: valueId, count, price },
+      type: "list"
+    }]);
+
+  }
+
+  function handlePost(e) {
     e.preventDefault();
-    await api.post("api/order", form).then(response => {
-      console.log(response.data);
-    });
+    const newForm = { ...form };
+    const singleItems = Object.values(singlePrice).map(item => ({ id: item.id, value: item.value, type: item.type }));
+    newForm.items = [...newForm.items].concat(singleItems);
+    
+    setForm(newForm);
   }
 
-  function handleTextArea(e) {
-    setForm({ ...form, obs: e.target.value });
-  }
+  // Input configuration
 
-  function handleInputs(op_id, val_id, type, price) {
-    setTotalPrice(totalPrice + price);
-    setForm({
-      ...form,
-      items: [
-        ...form.items,
-        {
-          id: op_id,
-          value: val_id,
-          type: type
-        }
-      ]
+  let optionsList = null;
+  const {options} = data;
+
+  if (options) {
+
+    optionsList = options.map(option => {
+
+      const values = option.values.map(value => (
+        <Fragment key={value.id}>
+          <FormGroup>
+            <Row> 
+              <Price>
+                <strong>{value.name}</strong>
+                <small>{formatter(value.price)}</small>
+              </Price>
+              <Input 
+                option={option} 
+                value={value} 
+                handleSingle={handleSingle} 
+                handleMultiple={handleMultiple}
+                handleList={handleList}
+              />
+            </Row>
+
+          </FormGroup>
+        </Fragment>
+      ));
+      
+      return (
+        <Fragment key={option.id}>
+          <Options>
+            <span>{option.title}</span>
+            {option.required && <Badge variant='secondary'>Obrigatório</Badge>}
+          </Options>
+          {values}
+        </Fragment>
+      );
     });
+    
   }
 
   return (
     <Modal isOpen={show} toggle={handleClose} scrollable>
-      <ModalBody>
-        <Form onSubmit={handleSubmit}>
-          {optionsProducts.map(options => (
-            <Fragment>
-              <Options key={options.id}>
-                <span>{options.title}</span>
-                {options.required && (
-                  <Badge variant="secondary">Obrigatório</Badge>
-                )}
-              </Options>
+      <ModalHeader>{data.name}</ModalHeader>
+        <ModalBody className='p-0'>
+          <Form onSubmit={handlePost}>
+              <CenterTop>
+                <Img src={data.image_url} alt={data.name} />
+              </CenterTop>
 
-              {options.values.map(values => (
-                <FormGroup key={values.id}>
-                  <RowInput>
-                    <LabelPrice>
-                      <strong>{values.name}</strong>
-                      <small>{formatter(values.price)}</small>
-                    </LabelPrice>
-                    {options.type === "single" && (
-                      <CustomInput
-                        type="radio"
-                        id={`valueId-${options.id}-${values.id}`}
-                        name={`valueName-${options.id}`}
-                        onClick={() =>
-                          handleInputs(
-                            options.id,
-                            values.id,
-                            options.type,
-                            values.price
-                          )
-                        }
-                      />
-                    )}
+              {optionsList}
 
-                    {options.type === "multiple" && (
-                      <PlusMinusInput min={options.min} max={options.max} />
-                    )}
+            <ModalFooter>
+              <Button type='submit'>
+                <b>Fazer seu pedido</b> <small>{formatter(totalPrice)}</small>
+              </Button>
+            </ModalFooter>
 
-                    {options.type === "list" && (
-                      <PlusMinusInput min={options.min} max={options.max} />
-                    )}
-                  </RowInput>
-                </FormGroup>
-              ))}
-            </Fragment>
-          ))}
-          <FormGroup>
-            <Label>Observação</Label>
-            <Input type="textarea" name="obs" onBlur={handleTextArea} />
-          </FormGroup>
-          <ModalFooter>
-            <StyledButton type="submit">
-              <b>Fazer pedido</b> <small>{formatter(totalPrice)}</small>
-            </StyledButton>
-          </ModalFooter>
-        </Form>
-      </ModalBody>
+          </Form>
+        </ModalBody>
     </Modal>
   );
 }
 
+
 ProductInfo.propTypes = {
   show: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired,
+  product: PropTypes.shape({
+    id: PropTypes.number.isRequired
+  }).isRequired
 };
 
 export default ProductInfo;

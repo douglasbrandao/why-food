@@ -1,15 +1,13 @@
 import styled from "styled-components";
-import { Button } from "reactstrap";
 
 export const Options = styled.div`
-  margin: 10px 0 5px 0;
+  margin: 10px 0 10px 0;
   background-color: #f2f2f2;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  border-radius: 5px;
   width: 100%;
-  padding: 10px;
+  padding: 15px 15px;
 
   span {
     font-weight: bold;
@@ -17,23 +15,40 @@ export const Options = styled.div`
   }
 `;
 
-export const StyledButton = styled(Button)`
+export const Button = styled.button`
+  padding: 0.6rem;
   background-color: #f00;
+  border-radius: 0.4rem;
   border: 0;
+  color: white;
 
   &:hover {
     background-color: #cc0000;
   }
 `;
 
-export const LabelPrice = styled.div`
+export const Price = styled.div`
   display: flex;
   flex-direction: column;
-  float: right;
   color: #4b4b4b;
 `;
 
-export const RowInput = styled.div`
+export const Row = styled.div`
   display: flex;
+  padding: 0 15px 0 15px;
   justify-content: space-between;
+`;
+
+export const Img = styled.img`
+  width: 150px;
+  height: 150px;
+  margin-top: 15px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+export const CenterTop = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
